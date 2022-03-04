@@ -1,0 +1,27 @@
+<div class="jumbotron py-2">
+  <h1 class="display-4 text-center">Triangles Form</h1>
+</div>
+<div class="row">
+  <div class="form-group col-md-3">
+    <app-coordinates-form></app-coordinates-form>
+    <div *ngIf="service.positionObservable | async as position; else empty">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Row</th>
+            <th>Column</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{position.row}}</td>
+            <td>{{position.column}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #empty>
+    </ng-template>
+  </div>
+</div> 
