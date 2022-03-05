@@ -21,7 +21,7 @@ namespace IvantiCodingQuestion.Services
             TriangleGridService.gridCoordinatesMap = new Dictionary<TriangleGridPosition, TriangleCoordinates>();
             TriangleGridService.coordinatesGridMap = new Dictionary<TriangleCoordinates, TriangleGridPosition>();
 
-            foreach (var row in rowPositionMap.Keys)
+            foreach (var row in TriangleGridService.rowPositionMap.Keys)
             {
                 // 1, 3, ... ,11
                 foreach (var oddColumns in Enumerable.Range(1, 12).Where(x => x % 2 == 1))
@@ -51,25 +51,26 @@ namespace IvantiCodingQuestion.Services
             return TriangleGridService.coordinatesGridMap[coordinates];
         }
 
-        //public TriangleCoordinates GetCoordinatesFromPosition(TriangleGridPosition position)
-        //{
-        //    (int X, int Y) diagonalVertex1 = (((position.Column - 1)/2)*10, TriangleGrid.rowPositionMap[position.Row]);
-        //    (int X, int Y) diagonalVertex2 = (diagonalVertex1.X + 10, diagonalVertex1.Y + 10);
-        //    (int X, int Y) baseVertex;
+        [Obsolete("Calculating the data is deprecated in favor of searching a dictionary for the data.")]
+        public TriangleCoordinates CalculateCoordinatesFromPosition(TriangleGridPosition position)
+        {
+            (int X, int Y) diagonalVertex1 = (((position.Column - 1) / 2) * 10, TriangleGridService.rowPositionMap[position.Row]);
+            (int X, int Y) diagonalVertex2 = (diagonalVertex1.X + 9, diagonalVertex1.Y + 9);
+            (int X, int Y) baseVertex;
 
-        //    bool isBottom = (position.Column % 2) == 1;
+            bool isBottom = (position.Column % 2) == 1;
 
-        //    if (isBottom)
-        //    {
-        //        baseVertex = (diagonalVertex1.X, diagonalVertex1.Y + 10);
-        //    }
-        //    else
-        //    {
-        //        baseVertex = (diagonalVertex1.X + 10, diagonalVertex1.Y);
-        //    }
+            if (isBottom)
+            {
+                baseVertex = (diagonalVertex1.X, diagonalVertex1.Y + 9);
+            }
+            else
+            {
+                baseVertex = (diagonalVertex1.X + 9, diagonalVertex1.Y);
+            }
 
-        //    return new TriangleCoordinates(diagonalVertex1, diagonalVertex2, baseVertex);
-        //}
+            return new TriangleCoordinates(diagonalVertex1, diagonalVertex2, baseVertex);
+        }
 
         public TriangleCoordinates GetCoordinatesFromPosition(TriangleGridPosition position)
         {

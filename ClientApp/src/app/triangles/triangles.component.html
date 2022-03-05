@@ -1,8 +1,8 @@
 <div class="jumbotron py-2">
-  <h1 class="display-4 text-center">Triangles Form</h1>
+  <h1 class="display-4 text-center">Triangles</h1>
 </div>
 <div class="row">
-  <div class="form-group">
+  <div class="form-group col-lg-6">
     <app-coordinates-form></app-coordinates-form>
     <div *ngIf="service.positionObservable | async as position; else positionResponseError">
       <table class="table">
@@ -27,7 +27,7 @@
     </ng-template>
   </div>
 
-  <div class="form-group">
+  <div class="form-group col-lg-6">
     <app-position-form></app-position-form>
     <div *ngIf="service.coordinatesObservable | async as coordinates; else coordinatesResponseError">
       <table class="table">

@@ -1,14 +1,17 @@
-<h1>Hello, world!</h1>
-<p>Welcome to your new single-page application, built with:</p>
+<h1>Home Page</h1>
+<p>This is a single-page angular front end web application bundled with an ASP Web API service. It provides the two following functions queried and displayed by the client application and calculated and returned by the service:</p>
 <ul>
-  <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-  <li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-  <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
+  <li><strong>1.A</strong> - Calculate the coordinates([X1,Y1], [X2,Y2], [X3,Y3]) of a triangle given a Row(A-F) and Column(1-12).</li>
+  <li><strong>1.B</strong> - Calculate the Row(A-F) and Column(1-12) of a triangle given a coordinates([X1,Y1], [X2,Y2], [X3,Y3]).</li>
 </ul>
-<p>To help you get started, we've also set up:</p>
+<p>The triangles in question are generated using the following rules:</p>
 <ul>
-  <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-  <li><strong>Angular CLI integration</strong>. In development mode, there's no need to run <code>ng serve</code>. It runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-  <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration automatically invokes <code>ng build</code> to produce minified, ahead-of-time compiled JavaScript files.</li>
+  <li>Each triangle is a right angle triangle with length and height of 10 pixels.</li>
+  <li>Using a 60 by 60 pixel grid starting at [0,0] at the top left, arrange triangles in pairs to create squares of 10 by 10 in size, filling the entire grid.</li>
+  <li>Each triangle pair has a hypotenus between its top left vertex and its bottom right vertex.</li>
+  <li>The magnitude of the vector formed by any two sides of a triangle is 10; because the triangles are discrete pixel positions and not continuous, the length is found by finding the difference between the verticies of a side and then adding 1. So a triangle with a Vertex [0,0] might have a side of length ten with the Vertex [0,9].</li>
+  <li>The Row of a triangle is determined by the vertical(Y) component of its verticies, starting at A for verticies between 0 and 9.</li>
+  <li>The Column of a triangle is determined by the horizontal(X) component of its verticies, starting at 1 and 2 for its first triangle pair for verticies between 0 and 9. The bottom left triangle takes the lower Column value and the top right triangle takes the next value.</li>
+  <li>Vertex ordering of a Triangle's coordinates is irrelevant. A coordinate of V1=[X1,Y1], V2=[X2,Y2], V3=[X3,Y3] is functionally equal to V2=[X1,Y1], V3=[X2,Y2], V1=[X3,Y3].</li>
 </ul>
-<p>The <code>ClientApp</code> subdirectory is a standard Angular CLI application. If you open a command prompt in that directory, you can run any <code>ng</code> command (e.g., <code>ng test</code>), or use <code>npm</code> to install extra packages into it.</p>
+<p>Select the "Triangles" nav menu item to access the functions.</p>
