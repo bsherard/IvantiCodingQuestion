@@ -8,7 +8,7 @@ namespace IvantiCodingQuestion.Services
 {
     public interface ITriangleRequestValidator
     {
-        public bool IsRequestCoordinatesValid(TriangleCoordinates coordinates);
-        public bool IsRequestPositionValid(TriangleGridPosition position);
+        public bool IsRequestCoordinatesValid(TriangleCoordinates coordinates, out string invalidMessage);
+        public bool IsRequestPositionValid(TriangleGridPosition position, out string invalidMessage);
     }
 }

@@ -23,18 +23,23 @@ namespace UnitTests
             var position2 = new TriangleGridPosition('A', 2);
             var position3 = new TriangleGridPosition('B', 3);
             var position4 = new TriangleGridPosition('F', 12);
+            string invalidMessage = null;
 
-            var result = validator.IsRequestPositionValid(position1);
+            var result = validator.IsRequestPositionValid(position1, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
 
-            result = validator.IsRequestPositionValid(position2);
+            result = validator.IsRequestPositionValid(position2, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
 
-            result = validator.IsRequestPositionValid(position3);
+            result = validator.IsRequestPositionValid(position3, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
 
-            result = validator.IsRequestPositionValid(position4);
+            result = validator.IsRequestPositionValid(position4, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
         }
 
         [NamedFact]
@@ -48,24 +53,31 @@ namespace UnitTests
             var position4 = new TriangleGridPosition('G', 1);
             var position5 = new TriangleGridPosition('A', -1);
             var position6 = new TriangleGridPosition('1', 1);
+            string invalidMessage = null;
 
-            var result = validator.IsRequestPositionValid(position1);
+            var result = validator.IsRequestPositionValid(position1, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(position1.Row)} must be contained in the set ['A', 'B', 'C', 'D', 'E', 'F']", invalidMessage);
 
-            result = validator.IsRequestPositionValid(position2);
+            result = validator.IsRequestPositionValid(position2, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(position1.Column)} must be inclusively contained between 1 and 12", invalidMessage);
 
-            result = validator.IsRequestPositionValid(position3);
+            result = validator.IsRequestPositionValid(position3, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(position1.Column)} must be inclusively contained between 1 and 12", invalidMessage);
 
-            result = validator.IsRequestPositionValid(position4);
+            result = validator.IsRequestPositionValid(position4, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(position1.Row)} must be contained in the set ['A', 'B', 'C', 'D', 'E', 'F']", invalidMessage);
 
-            result = validator.IsRequestPositionValid(position5);
+            result = validator.IsRequestPositionValid(position5, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(position1.Column)} must be inclusively contained between 1 and 12", invalidMessage);
 
-            result = validator.IsRequestPositionValid(position6);
+            result = validator.IsRequestPositionValid(position6, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(position1.Row)} must be contained in the set ['A', 'B', 'C', 'D', 'E', 'F']", invalidMessage);
         }
 
         [NamedFact]
@@ -78,21 +90,27 @@ namespace UnitTests
             var coordinates3 = new TriangleCoordinates((10, 10), (19, 10), (19, 19));
             var coordinates4 = new TriangleCoordinates((19, 10), (19, 19), (10, 10));
             var coordinates5 = new TriangleCoordinates((19, 19), (10, 10), (19, 10));
+            string invalidMessage = null;
 
-            var result = validator.IsRequestCoordinatesValid(coordinates1);
+            var result = validator.IsRequestCoordinatesValid(coordinates1, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates2);
+            result = validator.IsRequestCoordinatesValid(coordinates2, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates3);
+            result = validator.IsRequestCoordinatesValid(coordinates3, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates4);
+            result = validator.IsRequestCoordinatesValid(coordinates4, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates5);
+            result = validator.IsRequestCoordinatesValid(coordinates5, out invalidMessage);
             Assert.True(result);
+            Assert.Null(invalidMessage);
         }
 
         [NamedFact]
@@ -107,27 +125,36 @@ namespace UnitTests
             var coordinates5 = new TriangleCoordinates((0, 0), (0, 0), (0, 0));
             var coordinates6 = new TriangleCoordinates((0, 0), (19, 19), (0, 19));
             var coordinates7 = new TriangleCoordinates((0, 0), (9, 0), (0, 9));
+            string invalidMessage = null;
 
-            var result = validator.IsRequestCoordinatesValid(coordinates1);
+            var result = validator.IsRequestCoordinatesValid(coordinates1, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(TriangleCoordinates)} verticies must be contained in the following set [ 0, 9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59 ]", invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates2);
-            Assert.False(result);
 
-            result = validator.IsRequestCoordinatesValid(coordinates3);
+            result = validator.IsRequestCoordinatesValid(coordinates2, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(TriangleCoordinates)} verticies must be contained in the following set [ 0, 9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59 ]", invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates4);
+            result = validator.IsRequestCoordinatesValid(coordinates3, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(TriangleCoordinates)} verticies must be contained in the following set [ 0, 9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59 ]", invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates5);
+            result = validator.IsRequestCoordinatesValid(coordinates4, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(TriangleCoordinates)} verticies must be contained in the following set [ 0, 9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59 ]", invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates6);
+            result = validator.IsRequestCoordinatesValid(coordinates5, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(TriangleCoordinates)} 2 sides must be of length {Math.Sqrt(100)}.", invalidMessage);
 
-            result = validator.IsRequestCoordinatesValid(coordinates7);
+            result = validator.IsRequestCoordinatesValid(coordinates6, out invalidMessage);
             Assert.False(result);
+            Assert.Equal($"{nameof(TriangleCoordinates)} 2 sides must be of length {Math.Sqrt(100)}.", invalidMessage);
+
+            result = validator.IsRequestCoordinatesValid(coordinates7, out invalidMessage);
+            Assert.False(result);
+            Assert.Equal($"{nameof(TriangleCoordinates)} must have a hypotenus between the top left vertex and the bottom right.", invalidMessage);
         }
     }
 }

@@ -31,13 +31,13 @@ namespace IvantiCodingQuestion.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<TriangleCoordinates> GetCoordinates(TriangleGridPosition position)
         {
-            if (this.TriangleRequestValidator.IsRequestPositionValid(position))
+            if (this.TriangleRequestValidator.IsRequestPositionValid(position, out string invalidMessage))
             {
                 return Ok(this.TriangleGridService.GetCoordinatesFromPosition(position));
             }
             else
             {
-                return BadRequest();
+                return BadRequest(invalidMessage);
             }
         }
 
@@ -46,13 +46,13 @@ namespace IvantiCodingQuestion.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<TriangleGridPosition> GetGridPosition(TriangleCoordinates coordinates)
         {
-            if (this.TriangleRequestValidator.IsRequestCoordinatesValid(coordinates))
+            if (this.TriangleRequestValidator.IsRequestCoordinatesValid(coordinates, out string invalidMessage))
             {
-                return this.TriangleGridService.GetPositionFromCoordinates(coordinates);
+                return Ok(this.TriangleGridService.GetPositionFromCoordinates(coordinates));
             }
             else
             {
-                return BadRequest();
+                return BadRequest(invalidMessage);
             }
         }
     }

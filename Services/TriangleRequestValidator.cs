@@ -14,10 +14,11 @@ namespace IvantiCodingQuestion.Services
         private static readonly double triangleHypotenusLength = Math.Sqrt(200);
         private static readonly double triangleSideLength = Math.Sqrt(100);
 
-        public bool IsRequestCoordinatesValid(TriangleCoordinates coordinates)
+        public bool IsRequestCoordinatesValid(TriangleCoordinates coordinates, out string invalidMessage)
         {
             if (coordinates == null)
             {
+                invalidMessage = $"{nameof(TriangleCoordinates)} is null";
                 return false;
             }
 
@@ -27,34 +28,41 @@ namespace IvantiCodingQuestion.Services
                    !TriangleRequestValidator.IsVertexInRange(coordinates.Vertex3)
                )
             {
+                invalidMessage = $"{nameof(TriangleCoordinates)} verticies must be contained in the following set [ 0, 9, 10, 19, 20, 29, 30, 39, 40, 49, 50, 59 ]";
                 return false;
             }
 
-            if (!TriangleRequestValidator.IsVerticiesATriangle(coordinates))
+            if (!TriangleRequestValidator.IsVerticiesATriangle(coordinates, out string m))
             {
+                invalidMessage = m;
                 return false;
             }
 
+            invalidMessage = null;
             return true;
         }
 
-        public bool IsRequestPositionValid(TriangleGridPosition position)
+        public bool IsRequestPositionValid(TriangleGridPosition position, out string invalidMessage)
         {
             if (position == null)
             {
+                invalidMessage = $"{nameof(TriangleGridPosition)} is null";
                 return false;
             }
 
             if (!TriangleRequestValidator.gridRows.Contains(position.Row))
             {
+                invalidMessage = $"{nameof(position.Row)} must be contained in the set ['A', 'B', 'C', 'D', 'E', 'F']";
                 return false;
             }
 
             if (position.Column < TriangleRequestValidator.gridColumnRange.Minimum || position.Column > TriangleRequestValidator.gridColumnRange.Maximum)
             {
+                invalidMessage = $"{nameof(position.Column)} must be inclusively contained between 1 and 12";
                 return false;
             }
 
+            invalidMessage = null;
             return true;
         }
 
@@ -64,8 +72,9 @@ namespace IvantiCodingQuestion.Services
         /// a vertex on the top left and the bottom right.
         /// </summary>
         /// <param name="coordinates">The coordinates to be validated.</param>
+        /// <param name="invalidMessage">The message describing why the coordinates are invalid.</param> 
         /// <returns></returns>
-        private static bool IsVerticiesATriangle(TriangleCoordinates coordinates)
+        private static bool IsVerticiesATriangle(TriangleCoordinates coordinates, out string invalidMessage)
         {
             bool foundHypotenus = false;
 
@@ -75,6 +84,7 @@ namespace IvantiCodingQuestion.Services
             {
                 if (!IsTopLeftBottomRightHypotenus(coordinates.Vertex1, coordinates.Vertex2))
                 {
+                    invalidMessage = $"{nameof(TriangleCoordinates)} must have a hypotenus between the top left vertex and the bottom right.";
                     return false;
                 }
 
@@ -82,6 +92,7 @@ namespace IvantiCodingQuestion.Services
             }
             else if (length1 != TriangleRequestValidator.triangleSideLength)
             {
+                invalidMessage = $"{nameof(TriangleCoordinates)} 2 sides must be of length {triangleSideLength}.";
                 return false;
             }
 
@@ -91,11 +102,13 @@ namespace IvantiCodingQuestion.Services
             {
                 if (foundHypotenus)
                 {
+                    invalidMessage = $"{nameof(TriangleCoordinates)} 2 sides must be of length {triangleSideLength}.";
                     return false;
                 }
 
                 if (!IsTopLeftBottomRightHypotenus(coordinates.Vertex2, coordinates.Vertex3))
                 {
+                    invalidMessage = $"{nameof(TriangleCoordinates)} must have a hypotenus between the top left vertex and the bottom right.";
                     return false;
                 }
 
@@ -103,6 +116,7 @@ namespace IvantiCodingQuestion.Services
             }
             else if (length2 != TriangleRequestValidator.triangleSideLength)
             {
+                invalidMessage = $"{nameof(TriangleCoordinates)} 2 sides must be of length {triangleSideLength}.";
                 return false;
             }
 
@@ -112,11 +126,13 @@ namespace IvantiCodingQuestion.Services
             {
                 if (foundHypotenus)
                 {
+                    invalidMessage = $"{nameof(TriangleCoordinates)} 2 sides must be of length {triangleSideLength}.";
                     return false;
                 }
 
                 if (!IsTopLeftBottomRightHypotenus(coordinates.Vertex3, coordinates.Vertex1))
                 {
+                    invalidMessage = $"{nameof(TriangleCoordinates)} must have a hypotenus between the top left vertex and the bottom right.";
                     return false;
                 }
 
@@ -124,9 +140,11 @@ namespace IvantiCodingQuestion.Services
             }
             else if (length3 != TriangleRequestValidator.triangleSideLength)
             {
+                invalidMessage = $"{nameof(TriangleCoordinates)} 2 sides must be of length {triangleSideLength}.";
                 return false;
             }
 
+            invalidMessage = null;
             return foundHypotenus;
         }
 

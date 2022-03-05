@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TriangleCoordinates } from './triangle-coordinates.model';
 import { TriangleGridPosition } from './triangle-grid-position.model';
@@ -16,6 +16,10 @@ export class TrianglesService {
   private positionStore: { position: TriangleGridPosition } = { position: null };
   readonly positionObservable = this.positionSubject.asObservable();
 
+  private positionErrorSubject = new BehaviorSubject<string>(null);
+  private positionErrorStore: { error: string } = { error: null };
+  readonly positionErrorObservable = this.positionErrorSubject.asObservable();
+
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.coordinatesUrl = baseUrl + "Triangle/coordinates";
     this.positionUrl = baseUrl + "Triangle/position";
@@ -24,11 +28,18 @@ export class TrianglesService {
   getPositionFromCoordinates(coordinates: TriangleCoordinates) {
     this.http.post<TriangleGridPosition>(this.positionUrl, coordinates)
       .subscribe(
-        response => {
+        (response: TriangleGridPosition) => {
           this.positionStore.position = response;
           this.positionSubject.next(Object.assign({}, this.positionStore).position);
         },
-        err => { console.log(err); }
+        (errorResponse: HttpErrorResponse) => {
+          this.positionStore.position = null;
+          this.positionSubject.next(Object.assign({}, this.positionStore).position);
+
+          this.positionErrorStore.error = errorResponse.error;
+          this.positionErrorSubject.next(Object.assign({}, this.positionErrorStore).error);
+          console.log(errorResponse);
+        }
       )
   }
 

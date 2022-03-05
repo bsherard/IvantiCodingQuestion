@@ -26,8 +26,9 @@ namespace UnitTests
                 .Returns(mockServiceResponse);
 
             var mockValidator = new Mock<ITriangleRequestValidator>();
+            string invalidMessage;
             mockValidator
-                .Setup(validator => validator.IsRequestPositionValid(It.IsAny<TriangleGridPosition>()))
+                .Setup(validator => validator.IsRequestPositionValid(It.IsAny<TriangleGridPosition>(), out invalidMessage))
                 .Returns(true);
 
             var expectedResult = new ActionResult<TriangleCoordinates>(mockServiceResponse);
@@ -48,16 +49,64 @@ namespace UnitTests
         {
             var mockService = new Mock<ITriangleGridService>();
             var mockValidator = new Mock<ITriangleRequestValidator>();
+            string invalidMessage;
             mockValidator
-                .Setup(validator => validator.IsRequestPositionValid(It.IsAny<TriangleGridPosition>()))
+                .Setup(validator => validator.IsRequestPositionValid(It.IsAny<TriangleGridPosition>(), out invalidMessage))
                 .Returns(false);
 
             var controller = new TriangleController(mockService.Object, mockValidator.Object);
 
             var result = controller.GetCoordinates(null);
 
-            Assert.IsType< ActionResult<TriangleCoordinates>>(result);
-            Assert.IsType<BadRequestResult>(result.Result);
+            Assert.IsType<ActionResult<TriangleCoordinates>>(result);
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+        }
+
+        [NamedFact]
+        [Trait("Category", "Unit")]
+        public void GetPosition_Status200()
+        {
+            var mockServiceResponse = new TriangleGridPosition('A', 1);
+            var mockService = new Mock<ITriangleGridService>();
+            mockService
+                .Setup(service => service.GetPositionFromCoordinates(It.IsAny<TriangleCoordinates>()))
+                .Returns(mockServiceResponse);
+
+            var mockValidator = new Mock<ITriangleRequestValidator>();
+            string invalidMessage;
+            mockValidator
+                .Setup(validator => validator.IsRequestCoordinatesValid(It.IsAny<TriangleCoordinates>(), out invalidMessage))
+                .Returns(true);
+
+            var expectedResult = new ActionResult<TriangleGridPosition>(mockServiceResponse);
+
+            var controller = new TriangleController(mockService.Object, mockValidator.Object);
+
+            var result = controller.GetGridPosition(null);
+
+            Assert.IsType(expectedResult.GetType(), result);
+            Assert.IsType<OkObjectResult>(result.Result);
+
+            Assert.Equal(expectedResult.Value, (result.Result as OkObjectResult).Value);
+        }
+
+        [NamedFact]
+        [Trait("Category", "Unit")]
+        public void GetPosition_Status400()
+        {
+            var mockService = new Mock<ITriangleGridService>();
+            var mockValidator = new Mock<ITriangleRequestValidator>();
+            string invalidMessage;
+            mockValidator
+                .Setup(validator => validator.IsRequestPositionValid(It.IsAny<TriangleGridPosition>(), out invalidMessage))
+                .Returns(false);
+
+            var controller = new TriangleController(mockService.Object, mockValidator.Object);
+
+            var result = controller.GetGridPosition(null);
+
+            Assert.IsType<ActionResult<TriangleGridPosition>>(result);
+            Assert.IsType<BadRequestObjectResult>(result.Result);
         }
     }
 }

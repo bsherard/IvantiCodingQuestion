@@ -6,6 +6,10 @@ using System.Text.Json.Serialization;
 
 namespace IvantiCodingQuestion.Models
 {
+    /// <summary>
+    /// System.Text.Json doesn't like value tuples for some reason. There is probably a better answer
+    /// that deals with this but for now, just brute force the conversion manually.
+    /// </summary>
     public class VertexJsonConverter : JsonConverter<(int X, int Y)>
     {
         public override (int X, int Y) Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
