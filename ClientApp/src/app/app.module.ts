@@ -11,7 +11,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { TrianglesComponent } from './triangles/triangles.component';
 import { CoordinatesFormComponent } from './triangles/triangles-form/coordinates-form.component';
-//import { PositionFormComponent } from './triangles/triangles-form/position-form.component';
+import { PositionFormComponent } from './triangles/triangles-form/position-form.component';
 
 
 @NgModule({
@@ -23,7 +23,7 @@ import { CoordinatesFormComponent } from './triangles/triangles-form/coordinates
     FetchDataComponent,
     TrianglesComponent,
     CoordinatesFormComponent,
-    //PositionFormComponent
+    PositionFormComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

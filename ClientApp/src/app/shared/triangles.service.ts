@@ -20,6 +20,14 @@ export class TrianglesService {
   private positionErrorStore: { error: string } = { error: null };
   readonly positionErrorObservable = this.positionErrorSubject.asObservable();
 
+  private coordinatesSubject = new BehaviorSubject<TriangleCoordinates>(null);
+  private coordinatesStore: { coordinates: TriangleCoordinates } = { coordinates: null };
+  readonly coordinatesObservable = this.coordinatesSubject.asObservable();
+
+  private coordinatesErrorSubject = new BehaviorSubject<string>(null);
+  private coordinatesErrorStore: { error: string } = { error: null };
+  readonly coordinatesErrorObservable = this.coordinatesErrorSubject.asObservable();
+
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.coordinatesUrl = baseUrl + "Triangle/coordinates";
     this.positionUrl = baseUrl + "Triangle/position";
@@ -40,10 +48,24 @@ export class TrianglesService {
           this.positionErrorSubject.next(Object.assign({}, this.positionErrorStore).error);
           console.log(errorResponse);
         }
-      )
+      );
   }
 
-  getCoordinatesFromPosition(position: TriangleGridPosition): Observable<TriangleCoordinates> {
-    return this.http.post<TriangleCoordinates>(this.coordinatesUrl, position);
+  getCoordinatesFromPosition(position: TriangleGridPosition) {
+    this.http.post<TriangleCoordinates>(this.coordinatesUrl, position)
+      .subscribe(
+        (response: TriangleCoordinates) => {
+          this.coordinatesStore.coordinates = response;
+          this.coordinatesSubject.next(Object.assign({}, this.coordinatesStore).coordinates);
+        },
+        (errorResponse: HttpErrorResponse) => {
+          this.coordinatesStore.coordinates = null;
+          this.coordinatesSubject.next(Object.assign({}, this.coordinatesStore).coordinates);
+
+          this.coordinatesErrorStore.error = errorResponse.error;
+          this.coordinatesErrorSubject.next(Object.assign({}, this.coordinatesErrorStore).error);
+          console.log(errorResponse);
+        }
+      );
   }
 }

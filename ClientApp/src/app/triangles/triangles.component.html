@@ -2,15 +2,14 @@
   <h1 class="display-4 text-center">Triangles Form</h1>
 </div>
 <div class="row">
-  <div class="form-group col-md-3">
+  <div class="form-group">
     <app-coordinates-form></app-coordinates-form>
-    <div *ngIf="service.positionObservable | async as position; else error">
+    <div *ngIf="service.positionObservable | async as position; else positionResponseError">
       <table class="table">
         <thead>
           <tr>
             <th>Row</th>
             <th>Column</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -21,8 +20,35 @@
         </tbody>
       </table>
     </div>
-    <ng-template #error>
+    <ng-template #positionResponseError>
       <div *ngIf="service.positionErrorObservable | async as errorMessage;">
+        {{errorMessage}}
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="form-group">
+    <app-position-form></app-position-form>
+    <div *ngIf="service.coordinatesObservable | async as coordinates; else coordinatesResponseError">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Vertex1</th>
+            <th>Vertex2</th>
+            <th>Vertex3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>({{coordinates.vertex1.X}},{{coordinates.vertex1.Y}})</td>
+            <td>({{coordinates.vertex2.X}},{{coordinates.vertex2.Y}})</td>
+            <td>({{coordinates.vertex3.X}},{{coordinates.vertex3.Y}})</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #coordinatesResponseError>
+      <div *ngIf="service.coordinatesErrorObservable | async as errorMessage;">
         {{errorMessage}}
       </div>
     </ng-template>
